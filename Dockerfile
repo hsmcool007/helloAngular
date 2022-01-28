@@ -1,25 +1,29 @@
-FROM node AS builder
-# set working directory
+FROM node:16 as sdk
+
 WORKDIR /app
 
-# install and cache app dependencies
+COPY ./package.json /app
+
+RUN npm install
+
+FROM node:16 as builder
+
+WORKDIR /app
+
+COPY --from=sdk /app /app
+
 COPY . /app
 
-# install dependencies and build the angular app
-#RUN yarn && yarn run build
+RUN npm run build
 
+FROM nginx:1.17.9
 
-FROM nginx:stable-alpine
+WORKDIR /app
 
-# copy from dist to nginx root dir
-COPY --from=builder /app/dist/helloAngular  /usr/share/nginx/html
+RUN rm -rf /usr/share/nginx/html/*
 
-# expose port 80
+COPY --from=builder /app/dist/hellAngular /usr/share/nginx/html
+
 EXPOSE 80
 
-# set author info
-LABEL maintainer="Simon Huang"
-
-# run nginx in foreground
-# https://stackoverflow.com/questions/18861300/how-to-run-nginx-within-a-docker-container-without-halting
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT /bin/sh -c "nginx -g 'daemon off;'"
