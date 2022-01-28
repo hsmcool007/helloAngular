@@ -1,4 +1,4 @@
-FROM node:16 as sdk
+FROM node:14 as sdk
 
 WORKDIR /app
 
@@ -6,7 +6,7 @@ COPY . /app
 
 RUN npm install
 
-FROM node:16 as builder
+FROM node:14 as builder
 
 WORKDIR /app
 
@@ -14,7 +14,7 @@ COPY --from=sdk /app /app
 
 COPY . /app
 
-RUN npm run build
+RUN npm run build --prod
 
 FROM nginx:1.17.9
 
