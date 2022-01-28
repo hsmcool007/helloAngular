@@ -6,8 +6,8 @@ WORKDIR /app
 COPY . /app
 
 # install dependencies and build the angular app
-RUN npm install
-RUN npm run build --prod
+RUN yarn && yarn run build
+
 
 FROM nginx:stable-alpine
 
