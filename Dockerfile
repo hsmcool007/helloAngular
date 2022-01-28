@@ -2,7 +2,7 @@ FROM node:16 as sdk
 
 WORKDIR /app
 
-COPY ./package.json /app
+COPY . /app
 
 RUN npm install
 
