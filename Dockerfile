@@ -6,7 +6,7 @@ WORKDIR /app
 COPY . /app
 
 # install dependencies and build the angular app
-RUN yarn && yarn run build
+#RUN yarn && yarn run build
 
 
 FROM nginx:stable-alpine
